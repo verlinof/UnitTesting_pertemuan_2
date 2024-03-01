@@ -1,18 +1,41 @@
 package org.example;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WalletTest {
+
+    private ArrayList<Wallet> listWallet;
+
+    @BeforeAll
+    void setUpClass() {
+        listWallet = new ArrayList<Wallet>();
+    }
+
+    @AfterAll
+    void cleanUpClass() {
+        listWallet.clear();
+    }
+
+    @BeforeEach
+    void setUpMethod() {
+        Wallet wallet = new Wallet("Verlino");
+        listWallet.add(wallet);
+    }
+
+    @AfterEach
+    void cleanUpMethod() {
+        listWallet.clear();
+    }
 
     @Test
     void testSetOwner() {
-        Wallet wallet = new Wallet("Verlino");
+        Wallet wallet = listWallet.get(0);
         wallet.setOwner("fajri");
 
         Assertions.assertEquals("fajri", wallet.owner);
@@ -20,7 +43,8 @@ class WalletTest {
 
     @Test
     void testTambahKartu() {
-        Wallet wallet = new Wallet("Verlino");
+        Wallet wallet = listWallet.get(0);
+
         wallet.tambahKartu("BNI");
         wallet.tambahKartu("BCA");
 
@@ -31,7 +55,8 @@ class WalletTest {
 
     @Test
     void testAmbilKartu() {
-        Wallet wallet = new Wallet("Verlino");
+        Wallet wallet = listWallet.get(0);
+
         wallet.tambahKartu("BNI");
         wallet.tambahKartu("BCA");
 
@@ -44,7 +69,7 @@ class WalletTest {
 
     @Test
     void testAmbilKartuNoData() {
-        Wallet wallet = new Wallet("Verlino");
+        Wallet wallet = listWallet.get(0);
         wallet.tambahKartu("BNI");
         wallet.tambahKartu("BCA");
 
@@ -55,7 +80,8 @@ class WalletTest {
 
     @Test
     void testTambahUangRupiah() {
-        Wallet wallet = new Wallet("Verlino");
+        Wallet wallet = listWallet.get(0);
+
         //Uang Kertas
         wallet.tambahUangRupiah(1500);
         wallet.tambahUangRupiah(2500);
@@ -72,49 +98,52 @@ class WalletTest {
 
     @Test
     void testTambahUangMines() {
-        Wallet wallet = new Wallet("Verlino");
+        Wallet wallet = listWallet.get(0);
+
         //Cek input kalo mines
         Assertions.assertThrows(Error.class, () -> wallet.tambahUangRupiah(-500));
     }
 
     @Test
     void testAmbilUang() {
-        Wallet wallet1 = new Wallet("Verlino Fajri");
-        wallet1.tambahUangRupiah(500);
-        wallet1.tambahUangRupiah(300);
-        wallet1.tambahUangRupiah(1500);
-        wallet1.tambahUangRupiah(2500);
+        Wallet wallet = listWallet.get(0);
+
+        wallet.tambahUangRupiah(500);
+        wallet.tambahUangRupiah(300);
+        wallet.tambahUangRupiah(1500);
+        wallet.tambahUangRupiah(2500);
 
         //Check standard output
-        Assertions.assertEquals(500, wallet1.ambilUang(500));
+        Assertions.assertEquals(500, wallet.ambilUang(500));
         Integer[] expectedKoin = {300};
-        Assertions.assertArrayEquals(expectedKoin, wallet1.listUangKoin.toArray());
+        Assertions.assertArrayEquals(expectedKoin, wallet.listUangKoin.toArray());
 
         //Check properti Wallet
         Integer[] expectedLembaran = {1500, 2500};
-        Assertions.assertArrayEquals(expectedLembaran, wallet1.listUangLembaran.toArray());
+        Assertions.assertArrayEquals(expectedLembaran, wallet.listUangLembaran.toArray());
     }
 
     @Test
     void testAmbilUangKosong() {
-        Wallet wallet1 = new Wallet("Verlino Fajri");
+        Wallet wallet = listWallet.get(0);
 
-        Assertions.assertEquals(0, wallet1.ambilUang(500));
+        Assertions.assertEquals(0, wallet.ambilUang(500));
     }
 
     @Test
     void testTampilkanUang() {
-        Wallet wallet1 = new Wallet("Verlino Fajri");
-        wallet1.tambahUangRupiah(500);
-        wallet1.tambahUangRupiah(1500);
-        wallet1.tambahUangRupiah(2500);
+        Wallet wallet = listWallet.get(0);
 
-        Assertions.assertEquals(4500, wallet1.tampilkanUang());
+        wallet.tambahUangRupiah(500);
+        wallet.tambahUangRupiah(1500);
+        wallet.tambahUangRupiah(2500);
+
+        Assertions.assertEquals(4500, wallet.tampilkanUang());
     }
 
     @Test
     void testTampilkanUangKosong() {
-        Wallet wallet2 = new Wallet("Fajri");
-        Assertions.assertEquals(0, wallet2.tampilkanUang());
+        Wallet wallet = listWallet.get(0);
+        Assertions.assertEquals(0, wallet.tampilkanUang());
     }
 }

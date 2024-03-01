@@ -1,6 +1,9 @@
+package org.example;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Student {
     private String name;
@@ -32,12 +35,14 @@ public class Student {
     }
 
     public void setGrade(String course, String grade) {
-        courseGrades.put(course , "C");
+        courseGrades.put(course , grade);
     }
 
     public String getGrade(String course) {
         for (String coursename: courseGrades.keySet()) {
-            return courseGrades.get(coursename);
+            if(Objects.equals(coursename, course)) {
+                return courseGrades.get(coursename);
+            }
         }
         return null;
     }
