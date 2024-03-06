@@ -19,7 +19,7 @@ class WalletTest {
 
     @AfterAll
     void cleanUpClass() {
-        listWallet.clear();
+        listWallet = null;
     }
 
     @BeforeEach
