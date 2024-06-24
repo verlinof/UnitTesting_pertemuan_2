@@ -9,6 +9,9 @@ public class HomePage {
         this.driver = driver;
     }
 
+    public String getUrl() {
+        return driver.getCurrentUrl();
+    }
 
 
 }

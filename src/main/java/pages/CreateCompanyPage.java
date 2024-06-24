@@ -4,24 +4,23 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class ApplyPage {
+public class CreateCompanyPage {
     WebDriver driver;
     WebDriverWait wait;
 
-    public ApplyPage(WebDriver driver) {
+    public CreateCompanyPage(WebDriver driver) {
         this.driver = driver;
         Duration timeout = Duration.ofSeconds(10);
         wait = new WebDriverWait(driver, timeout); // Initialize WebDriverWait with a timeout of 10 seconds
     }
 
-    By cvUrl = By.id("cvUrl");
-    By portofolioUrl = By.id("portofolioUrl");
-    By role = By.id("role");
+    By fileUpload = By.id("file-upload");
+    By companyName = By.id("company-name");
+    By companyDescription = By.id("company-description");
     By submitBtn = By.id("btn-submit");
 
     public void waitLoading() {
@@ -32,22 +31,19 @@ public class ApplyPage {
         return driver.getCurrentUrl();
     }
 
-    public void enterCv(String cv) {
-        WebElement cvElement = wait.until(ExpectedConditions.visibilityOfElementLocated(cvUrl));
-        cvElement.sendKeys(cv);
+    public void uploadFile(String path) {
+        WebElement fileUploadElement = wait.until(ExpectedConditions.visibilityOfElementLocated(fileUpload));
+        fileUploadElement.sendKeys(path);
     }
 
-    public void enterPortofolio(String porto) {
-        WebElement portofolioElement = wait.until(ExpectedConditions.visibilityOfElementLocated(portofolioUrl));
-        portofolioElement.sendKeys(porto);
+    public void enterCompanyName(String name) {
+        WebElement companyNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(companyName));
+        companyNameElement.sendKeys(name);
     }
 
-    public void selectRole(By id) {
-        WebElement roleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(role));
-        roleElement.click();
-
-        WebElement selectItem = wait.until(ExpectedConditions.visibilityOfElementLocated(id));
-        selectItem.click();
+    public void enterCompanyDescription(String description) {
+        WebElement companyDescriptionElement = wait.until(ExpectedConditions.visibilityOfElementLocated(companyDescription));
+        companyDescriptionElement.sendKeys(description);
     }
 
     public void clickSubmit() {
