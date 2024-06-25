@@ -30,7 +30,7 @@ public class CompanyManagementStep {
         driver = Hooks.getDriver("Company Management");
     }
 
-    @Given("User is logged in using admin account")
+    @Given("Admin is logged in using admin account")
     public void userLoggedIn() {
         setupChromeDriver();
         driver.get("http://localhost:3000/");
@@ -44,13 +44,13 @@ public class CompanyManagementStep {
         Hooks.test.log(Status.INFO, "User logged in using admin account");
     }
 
-    @And("User navigated to the create company page")
+    @Given("Admin navigated to the create company page")
     public void userInCreateCompanyPage() {
         driver.get("http://localhost:3000/admin/company-management/add-company");
-        Hooks.test.log(Status.INFO, "User navigated to the create company page");
+        Hooks.test.log(Status.INFO, "Admin navigated to the create company page");
     }
 
-    @When("User submit the company form with valid details")
+    @When("Admin submit the company form with valid details")
     public void userSubmitCompanyWithValidDetails() {
         CreateCompanyPage createCompanyPage = new CreateCompanyPage(driver);
 
@@ -61,10 +61,10 @@ public class CompanyManagementStep {
         createCompanyPage.enterCompanyDescription("Expantrade Description");
         createCompanyPage.clickSubmit();
 
-        Hooks.test.log(Status.INFO, "User submit the company form with valid details");
+        Hooks.test.log(Status.INFO, "Admin submit the company form with valid details");
     }
 
-    @Then("User should see a success message Success Creating Company")
+    @Then("Admin should see a success message Success Creating Company")
     public void userShouldSeeASuccessMessageSuccessCreatingCompany() {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         try {
@@ -75,19 +75,19 @@ public class CompanyManagementStep {
         } catch (AssertionError e) {
             Hooks.test.log(Status.FAIL, "The success message does not exist");
         }
-//        driver.quit();
     }
 
-    @And("User navigated to the update company page")
+    @Given("Admin navigated to the update company page")
     public void userInUpdateCompanyPage() {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         driver.get("http://localhost:3000/admin/company-management/all-company");
         WebElement editBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-1")));
 
         editBtn.click();
+        Hooks.test.log(Status.INFO, "Admin navigated to the update company page");
     }
 
-    @When("User update the company with valid details")
+    @When("Admin update the company with valid details")
     public void userUpdateCompanyWithValidDetails() {
         UpdateCompanyPage updateCompanyPage = new UpdateCompanyPage(driver);
         updateCompanyPage.waitLoading();
@@ -97,25 +97,46 @@ public class CompanyManagementStep {
         updateCompanyPage.enterCompanyDescription("Expantrade Description");
         updateCompanyPage.clickSubmit();
 
-        Hooks.test.log(Status.INFO, "User update the company with valid details");
+        Hooks.test.log(Status.INFO, "Admin update the company with valid details");
     }
 
-    @Then("User should be redirected to all company page")
+    @Then("Admin should be redirected to all company page")
     public void userShouldBeRedirectedToAllCompanyPage() throws InterruptedException {
         CompanyDashboardPage companyDashboardPage = new CompanyDashboardPage(driver);
-        WebDriverWait wait = new WebDriverWait(driver, timeout);
         Thread.sleep(3000);
         try {
            Assert.assertEquals("http://localhost:3000/admin/company-management/all-company", companyDashboardPage.getUrl());
-            Hooks.test.log(Status.PASS, "User redirected to all company page");
+            Hooks.test.log(Status.PASS, "Admin redirected to all company page");
         } catch (AssertionError e) {
             Hooks.test.log(Status.FAIL, "Failed to redirected to all company page");
         }
 //        driver.quit();
     }
 
+    @Given("Admin navigated to the all company page")
+    public void userNavigatedToTheAllCompanyPage() {
+        driver.get("http://localhost:3000/admin/company-management/all-company");
+        Hooks.test.log(Status.INFO, "Admin navigated to the all company page");
+    }
+
+
+    @And("Admin click the delete button on company")
+    public void userClickTheDeleteButtonOnCompany() {
+        CompanyDashboardPage companyDashboardPage = new CompanyDashboardPage(driver);
+        companyDashboardPage.clickDeleteButton("15");
+        Hooks.test.log(Status.INFO, "Admin click the delete button on company");
+    }
+
+    @When("Admin click the confirm delete button")
+    public void userClickTheConfirmDeleteButton() {
+        CompanyDashboardPage companyDashboardPage = new CompanyDashboardPage(driver);
+        companyDashboardPage.clickConfirmDeleteButton();
+        Hooks.test.log(Status.INFO, "Admin click the confirm delete button");
+    }
+
     @AfterClass
     public static void tearDown() {
         driver.quit();
     }
+
 }
