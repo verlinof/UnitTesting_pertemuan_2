@@ -1,5 +1,6 @@
 package pages;
 
+import Objects.UpdateCompanyObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,20 +12,17 @@ import java.time.Duration;
 public class UpdateCompanyPage {
     WebDriver driver;
     WebDriverWait wait;
+    UpdateCompanyObject updateCompanyObject;
 
     public UpdateCompanyPage(WebDriver driver) {
         this.driver = driver;
         Duration timeout = Duration.ofSeconds(10);
-        wait = new WebDriverWait(driver, timeout); // Initialize WebDriverWait with a timeout of 10 seconds
+        wait = new WebDriverWait(driver, timeout);
+        updateCompanyObject = new UpdateCompanyObject();
     }
 
-    By fileUpload = By.id("file-upload");
-    By companyName = By.id("company-name");
-    By companyDescription = By.id("company-description");
-    By submitBtn = By.id("btn-submit");
-
     public void waitLoading() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(submitBtn));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(updateCompanyObject.getSubmitBtn()));
     }
 
     public String getUrl() {
@@ -32,22 +30,22 @@ public class UpdateCompanyPage {
     }
 
     public void uploadFile(String path) {
-        WebElement fileUploadElement = wait.until(ExpectedConditions.visibilityOfElementLocated(fileUpload));
+        WebElement fileUploadElement = wait.until(ExpectedConditions.visibilityOfElementLocated(updateCompanyObject.getFileUpload()));
         fileUploadElement.sendKeys(path);
     }
 
     public void enterCompanyName(String name) {
-        WebElement companyNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(companyName));
+        WebElement companyNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(updateCompanyObject.getCompanyName()));
         companyNameElement.sendKeys(name);
     }
 
     public void enterCompanyDescription(String description) {
-        WebElement companyDescriptionElement = wait.until(ExpectedConditions.visibilityOfElementLocated(companyDescription));
+        WebElement companyDescriptionElement = wait.until(ExpectedConditions.visibilityOfElementLocated(updateCompanyObject.getCompanyDescription()));
         companyDescriptionElement.sendKeys(description);
     }
 
     public void clickSubmit() {
-        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(submitBtn));
+        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(updateCompanyObject.getSubmitBtn()));
         submitButton.click();
     }
 }

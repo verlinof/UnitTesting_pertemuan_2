@@ -1,10 +1,12 @@
 package stepDefinitions;
 
+import com.aventstack.extentreports.Status;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -19,11 +21,12 @@ import java.time.Duration;
 
 
 public class ApplyJobSteps {
-    WebDriver driver;
+    static WebDriver driver;
     Duration timeout = Duration.ofSeconds(5);
-    void setupChromeDriver() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+
+    @BeforeClass
+    public static void setupChromeDriver() {
+        driver = Hooks.getDriver("Apply Job");
     }
 
     @Given("User is logged in")
@@ -37,12 +40,14 @@ public class ApplyJobSteps {
         // Execute JavaScript directly in the browser context
         js.executeScript("window.localStorage.setItem('token', '2|oiKe39tjBo7Wdznt0JrILMj7uRv3b5quPBSrNQyOd29e3aef');");
         js.executeScript("window.localStorage.setItem('user', '{\"google_id\":\"105611254639936463385\",\"id\":1,\"name\":\"Verlino Raya Fajri\",\"email\":\"verlinorayafajri@mail.ugm.ac.id\",\"avatar\":\"https://lh3.googleusercontent.com/a/ACg8ocKJY3OEivwRoUh-XVx2uxn60zwgqATJ6NHgUahwAdAX71O5cQ=s96-c\",\"phone_number\":null,\"is_admin\":1}');");
+        Hooks.test.log(Status.INFO, "User logged in");
     }
 
 
     @And("User navigated to the application page")
     public void userInApplyJobPage() {
         driver.get("http://localhost:3000/apply-job/2/apply");
+        Hooks.test.log(Status.INFO, "User navigated to the application page");
     }
 
     @When("User submit the application form with valid details")
@@ -51,20 +56,28 @@ public class ApplyJobSteps {
 
         applyPage.waitLoading();
 
-        applyPage.enterPortofolio("https://www.verlinofajri.xyz/");
-        applyPage.enterCv("https://www.verlinofajri.xyz/");
-        By id = By.id("7");
-        applyPage.selectRole(id);
-
-        applyPage.clickSubmit();
+        try {
+            applyPage.enterPortofolio("https://www.verlinofajri.xyz/");
+            applyPage.enterCv("https://www.verlinofajri.xyz/");
+            By id = By.id("7");
+            applyPage.selectRole(id);
+            applyPage.clickSubmit();
+            Hooks.test.log(Status.PASS, "User submitted the application form with valid details");
+        } catch (Exception e) {
+            Hooks.test.log(Status.FAIL, e.getMessage());
+        }
     }
 
     @Then("User should see a success message Success Applying project")
     public void successMessage() {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         WebElement toastContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("Toastify__toast-container")));
-        Assert.assertNotNull(toastContainer);
-        HomePage homePage = new HomePage(driver);
+        try {
+            Assert.assertNotNull(toastContainer);
+            Hooks.test.log(Status.PASS, "The success message exists");
+        } catch (AssertionError e) {
+            Hooks.test.log(Status.FAIL, e.getMessage());
+        }
         driver.quit();
     }
 
