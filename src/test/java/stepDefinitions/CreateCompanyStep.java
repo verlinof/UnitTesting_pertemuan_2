@@ -12,7 +12,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pages.CompanyDashboardPage;
 import pages.CreateCompanyPage;
+import pages.UpdateCompanyPage;
 
 import java.time.Duration;
 
@@ -26,7 +28,7 @@ public class CreateCompanyStep {
     }
 
     @Given("User is logged in using admin account")
-    public void userLogedIn() {
+    public void userLoggedIn() {
         setupChromeDriver();
         driver.get("http://localhost:3000/");
 
@@ -55,12 +57,42 @@ public class CreateCompanyStep {
         createCompanyPage.clickSubmit();
     }
 
-
     @Then("User should see a success message Success Creating Company")
     public void userShouldSeeASuccessMessageSuccessCreatingCompany() {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         WebElement toastContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("Toastify__toast-container")));
         Assert.assertNotNull(toastContainer);
+        driver.quit();
+    }
+
+    @And("User navigated to the update company page")
+    public void userInUpdateCompanyPage() {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        driver.get("http://localhost:3000/admin/company-management/all-company");
+        WebElement editBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-1")));
+
+        editBtn.click();
+    }
+
+    @When("User update the company with valid details")
+    public void userUpdateCompanyWithValidDetails() {
+        UpdateCompanyPage updateCompanyPage = new UpdateCompanyPage(driver);
+        updateCompanyPage.waitLoading();
+
+        updateCompanyPage.uploadFile("C:\\Users\\marim\\Documents\\Kuliah\\Semester 4\\Praktikum pengujian perangkat lunak\\softlancer_testing\\grab-logo.png");
+        updateCompanyPage.enterCompanyName("Expantrade Update Data");
+        updateCompanyPage.enterCompanyDescription("Expantrade Description");
+        updateCompanyPage.clickSubmit();
+    }
+
+    @Then("User should be redirected to all company page")
+    public void userShouldBeRedirectedToAllCompanyPage() throws InterruptedException {
+        CompanyDashboardPage companyDashboardPage = new CompanyDashboardPage(driver);
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        Thread.sleep(5000);
+//        WebElement toastContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("Toastify__toast-container")));
+//        Assert.assertNotNull(toastContainer);
+        Assert.assertEquals("http://localhost:3000/admin/company-management/all-company", companyDashboardPage.getUrl());
         driver.quit();
     }
 }
