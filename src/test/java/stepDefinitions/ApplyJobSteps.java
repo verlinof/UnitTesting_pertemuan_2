@@ -40,14 +40,14 @@ public class ApplyJobSteps {
         // Execute JavaScript directly in the browser context
         js.executeScript("window.localStorage.setItem('token', '2|oiKe39tjBo7Wdznt0JrILMj7uRv3b5quPBSrNQyOd29e3aef');");
         js.executeScript("window.localStorage.setItem('user', '{\"google_id\":\"105611254639936463385\",\"id\":1,\"name\":\"Verlino Raya Fajri\",\"email\":\"verlinorayafajri@mail.ugm.ac.id\",\"avatar\":\"https://lh3.googleusercontent.com/a/ACg8ocKJY3OEivwRoUh-XVx2uxn60zwgqATJ6NHgUahwAdAX71O5cQ=s96-c\",\"phone_number\":null,\"is_admin\":1}');");
-        Hooks.test.log(Status.INFO, "User logged in");
+        Hooks.applyJobtest.log(Status.INFO, "User logged in");
     }
 
 
     @And("User navigated to the application page")
     public void userInApplyJobPage() {
         driver.get("http://localhost:3000/apply-job/2/apply");
-        Hooks.test.log(Status.INFO, "User navigated to the application page");
+        Hooks.applyJobtest.log(Status.INFO, "User navigated to the application page");
     }
 
     @When("User submit the application form with valid details")
@@ -62,9 +62,9 @@ public class ApplyJobSteps {
             By id = By.id("7");
             applyPage.selectRole(id);
             applyPage.clickSubmit();
-            Hooks.test.log(Status.PASS, "User submitted the application form with valid details");
+            Hooks.applyJobtest.log(Status.PASS, "User submitted the application form with valid details");
         } catch (Exception e) {
-            Hooks.test.log(Status.FAIL, e.getMessage());
+            Hooks.applyJobtest.log(Status.FAIL, e.getMessage());
         }
     }
 
@@ -74,9 +74,9 @@ public class ApplyJobSteps {
         WebElement toastContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("Toastify__toast-container")));
         try {
             Assert.assertNotNull(toastContainer);
-            Hooks.test.log(Status.PASS, "The success message exists");
+            Hooks.applyJobtest.log(Status.PASS, "The success message exists");
         } catch (AssertionError e) {
-            Hooks.test.log(Status.FAIL, e.getMessage());
+            Hooks.applyJobtest.log(Status.FAIL, e.getMessage());
         }
         driver.quit();
     }
