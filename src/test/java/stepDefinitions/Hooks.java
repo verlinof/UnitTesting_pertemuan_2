@@ -24,12 +24,13 @@ public class Hooks {
         }
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        if(testTitle.equals("Apply Job Test")) {
+        if(testTitle.equals("Apply Job")) {
             applyJobtest = extent.createTest("Apply Job");
+        } else {
+            createCompanytest = extent.createTest("Create Company Test");
+            updateCompanytest = extent.createTest("Update Company Test");
+            deleteCompanytest = extent.createTest("Delete Company Test");
         }
-        createCompanytest = extent.createTest("Create Company Test");
-        updateCompanytest = extent.createTest("Update Company Test");
-        deleteCompanytest = extent.createTest("Delete Company Test");
     }
 
     public static WebDriver getDriver(String testTitle) {
